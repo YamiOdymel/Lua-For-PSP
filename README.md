@@ -319,8 +319,8 @@ end
 呼！現在讓我們結束循環。我們需要翻轉螢幕以便離屏快取的內容寫到顯屏上。注意，此處的 `end` 是終止我們的 `while` 循環。
 
 ```lua
-screen.waitVblankStart()
-screen.flip()
+    screen.waitVblankStart()
+    screen.flip()
 end
 ```
 
@@ -418,7 +418,7 @@ Player[2] = { weapon = "knife", health = 100 }
 
 ```lua
 while true do
-pad = Controls.read()
+    pad = Controls.read()
 ```
 
 現在新增清屏命令以便每次循環時清空螢幕。
@@ -456,8 +456,8 @@ end
 最後，讓我們快取、翻屏並終止循環。新增下述原始碼：
 
 ```lua
-screen.waitVblankStart()
-screen.flip()
+    screen.waitVblankStart()
+    screen.flip()
 end
 ```
 
@@ -835,8 +835,8 @@ end
 最後讓我結束循環。使用如下程式碼：
 
 ```lua
-screen.waitVblankStart()
-screen.flip()
+    screen.waitVblankStart()
+    screen.flip()
 end
 ```
 
@@ -916,38 +916,38 @@ Player = { }
 Player[1] = { x = 200, y = 50 }
 
 while true do
-pad = Controls.read()
-screen:clear()
+    pad = Controls.read()
+    screen:clear()
 
-for a = 0, 14 do
-    for b = 0,8 do
-        screen:blit(32 * a, 32 * b, grass)
+    for a = 0, 14 do
+        for b = 0,8 do
+            screen:blit(32 * a, 32 * b, grass)
+        end
     end
-end
 
-screen:blit(100,100,flower)
-screen:blit(300,220,flower)
+    screen:blit(100,100,flower)
+    screen:blit(300,220,flower)
 
-screen:blit(Player[1].x,Player[1].y,player)
+    screen:blit(Player[1].x,Player[1].y,player)
 
-if pad:left() and Player[1].x > 0 then
-    Player[1].x = Player[1].x - 2
-end
+    if pad:left() and Player[1].x > 0 then
+        Player[1].x = Player[1].x - 2
+    end
 
-if pad:right() and Player[1].x < screenwidth then
-    Player[1].x = Player[1].x + 2
-end
+    if pad:right() and Player[1].x < screenwidth then
+        Player[1].x = Player[1].x + 2
+    end
 
-if pad:up() and Player[1].y > 0 then
-    Player[1].y = Player[1].y - 2
-end
+    if pad:up() and Player[1].y > 0 then
+        Player[1].y = Player[1].y - 2
+    end
 
-if pad:down() and Player[1].y < screenheight then
-    Player[1].y = Player[1].y + 2
-end
+    if pad:down() and Player[1].y < screenheight then
+        Player[1].y = Player[1].y + 2
+    end
 
-screen.waitVblankStart()
-screen.flip()
+    screen.waitVblankStart()
+    screen.flip()
 end
 ```
 
@@ -989,13 +989,13 @@ function pasteImages()
     for a = 0, 14 do
         for b = 0,8 do
             screen:blit(32 * a, 32 * b, grass)
+        end
     end
-end
 
-screen:blit(100,100,flower)
-screen:blit(300,220,flower)
+    screen:blit(100,100,flower)
+    screen:blit(300,220,flower)
 
-screen:blit(Player[1].x,Player[1].y,player)
+    screen:blit(Player[1].x,Player[1].y,player)
 end
 
 -- Main Loop
