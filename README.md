@@ -4,7 +4,7 @@
 
 本系列教學旨在幫助完全的編程新手學會使用lua腳本語言為PSP開發小型程式和遊戲。在開始之前我們需要做一些準備工作，雖然不都是非要不可，但是有了它們你會事半功倍。
 
-譯者註：本教學全部學完了你也就是會爬而已。要學會走，甚至跑起來，就看你的熱情和毅力了！
+> 譯者註：本教學全部學完了你也就是會爬而已。要學會走，甚至跑起來，就看你的熱情和毅力了！
 
 LuaPlayer for PSP - 這是頭等大事，沒有它你的lua腳本就無法在PSP上執行。點此下載
 
@@ -16,24 +16,24 @@ LuaPlayer for Windows - 這是在PC上執行的LuaPlayer，寫好了腳本可以
 
 Notepad++ - 比windows自帶的notepad要強悍多的開源免費文本編輯器，可以高亮顯示多種程式語言，還具備自動完成功能，自動對程式碼樹級管理。點此下載
 
-當然你也可以使用其他任何文本編輯器編寫腳本，包括Notepad。 （以前推薦的miro lua不如這個強，刪除。）
+當然你也可以使用其他任何文本編輯器編寫腳本，包括 Notepad。 （以前推薦的miro lua不如這個強，刪除。）
 
-Windows版LuaPlayer的使用
+Windows 版 LuaPlayer 的使用
 
-解壓luaPlayerWindows.rar至硬碟。在luaplayer.exe所在目錄下，建立一個文本檔案，內容是
+解壓 `luaPlayerWindows.rar` 至硬碟。在 `luaplayer.exe` 所在目錄下，建立一個文本檔案，內容是
 
 ```
 luaplayer script.lua
 pause
 ```
 
-將其存為script.cmd，確保不要存成txt後綴。這樣可以方便在PC上執行你的程式。其中luaplayer是指所在資料夾的luaplayer.exe，而script.lua則是你編寫的程式檔案名。Pause則是保證發生錯誤時命令列視窗不會關閉。這樣我們就可以為程式捉蟲。
+將其存為 `script.cmd`，確保不要存成 `txt` 後綴。這樣可以方便在 PC 上執行你的程式。其中 `luaplayer` 是指所在資料夾的 `luaplayer.exe`，而 `script.lua` 則是你編寫的程式檔案名。`pause` 則是保證發生錯誤時命令列視窗不會關閉。這樣我們就可以為程式捉蟲。
 
-注意：如果雙擊script.cmd檔案出現下述錯誤
+注意：如果雙擊 `script.cmd` 檔案出現下述錯誤
 
 > 'luaplayer' is not recognized as an internal or external command, operable program or batch file
 
-那麼就用luaplayer.exe的全路徑替代luaplayer。例如：
+那麼就用 `luaplayer.exe` 的全路徑替代 `luaplayer`。例如：
 
 ```
 "C:\Documents and Settings\Owner\Desktop\mygame\luaplayer.exe" 
@@ -41,7 +41,7 @@ script.lua
 pause
 ```
 
-現在我們使用Notepad（或者其他任何編輯器，例如ConTEXT） 再建一個文本檔案，命名為script.lua（註：如果你嘗試在PSP上執行該腳本發生“腳本未找到”錯誤時你可能需要將其改名為index.lua）。我們暫時就留空，下一講我們會讓你在其中編寫程式碼並測試它的。以後要讓Windows版LuaPlayer執行你的程式碼，很簡單，只要雙擊script.cmd檔案就行了。
+現在我們使用 Notepad（或者其他任何編輯器，例如 ConTEXT）再建一個文本檔案，命名為 `script.lua`（註：如果你嘗試在 PSP 上執行該腳本發生「腳本未找到」錯誤時你可能需要將其改名為 `index.lua`）。我們暫時就留空，下一講我們會讓你在其中編寫程式碼並測試它的。以後要讓 Windows 版 LuaPlayer 執行你的程式碼，很簡單，只要雙擊 `script.cmd` 檔案就行了。
 
 # 2——編寫你的第一個Lua程序
 
