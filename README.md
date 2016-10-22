@@ -1393,3 +1393,222 @@ end
 ```
 
 ...接下來... Oh yeah！已經完成啦！執行試試看吧。
+
+# 11——了解定時器
+
+本課我們將學習在程序中如何使用毫秒定時器。定時器可以在程序中派很多用處。通過定時器你可以使某些程式碼僅在一個正確的時間段內執行。
+
+下面這個小型的PSP程序將教您使用定時器，並顯示訊息在螢幕上。顯示的訊息內容取決於計時器的時間。
+
+首先，讓我們建立一個白色對象。
+
+```lua
+white = Color.new(255,255,255)
+```
+
+為了建立一個定時器，我們使用命令 Timer.new()。 我們將此定時器存為一個變數。下面讓我們建立一個定時器。
+
+```lua
+counter = Timer.new()
+```
+
+要啟動或停止一個定時器請使用命令 timername:start() 和 timername:stop()。我們想在程序開始啟動我們的定時器，所以加上下面代碼：
+
+```lua
+counter:start()
+```
+
+請注意我們在命令中使用了剛才建立的定時器名字。 下一步，我們來建立我們程序的主循環，並添加每次循環清屏的代碼。如下：
+
+```lua
+while true do
+screen:clear()
+```
+
+現在，在我們的程序中將需要與定時器的計時步伐保持一致。我們將利用定時器的當前時間顯示訊息到螢幕上。我們可以通過命令 countername:time() 得到定時器的當前時間。添加如下代碼：
+
+```lua
+currentTime = counter:time()
+```
+
+這會把定時器的當前時間保存到變數 currentTime 中。下面我們加入一些程式碼，在每次循環時將定時器的當前時間列印到螢幕上。代碼如下：
+
+```lua
+screen:print(10,10,"Counter Time: " .. currentTime,white)
+```
+
+現在，我們將使用一些 if 語句來判斷我們的定時器是否在某個時間，若是則顯示一則消息。先來加上第一項：
+
+```lua
+if currentTime < 1000 then
+screen:print(100,100,"Less than 1000",white)
+end
+```
+
+這段代碼是檢查定時器的時間是否小於1000。如果是，則“Less than 1000”將列印到螢幕上。現在，讓我們再加入一項。
+
+```lua
+if currentTime > 1000 and currentTime < 2000 then
+screen:print(100,100,"Greater than 1000",white)
+end
+```
+
+這將檢查定時器的時間是否比1000大，但小於2000。如果是，則“Greater than 1000”將被列印。最後的 if 語句將在時間超過2000時把我們的定時器復位回零。 我們可以使用 timername:reset(number) 命令重設定時器。
+
+括號內的數值是定時器將被設回的起始時間。復位定時器也將停止定時器，所以我們還要重新啟動它。代碼如下：
+
+```lua
+if currentTime > 2000 then
+counter:reset(0)
+counter:start()
+end
+```
+
+通過此代碼，如果定時器時間超過2000，我們的定時器將復位回零並重新開始。最後，讓我們結束我們的主循環。
+
+```lua
+screen.waitVblankStart()
+screen.flip() end
+```
+
+# 12——碰撞示範
+
+本課我們講解如何在 lua 中製作一些簡單的碰撞。本方法使用盒式碰撞，沒有達到像素級精度。因為這是你的第一次碰撞嘗試，所以簡單一點好。
+
+我們將要做的這個小示範將使用一個可移動的玩家角色。螢幕上還有三個實施了碰撞效果的方塊。玩家將無法穿過這些方塊。
+
+首先我們建立兩個要用的色彩。一個用於玩家，一個用於我們的方塊。
+
+```lua
+green=Color.new(0,255,0)
+white = Color.new(255,255,255)
+```
+
+接著建立玩家和方塊要用的圖像。先建立空的 32x32 的方塊，然後用我們剛剛建立的顏色填充它們。
+
+```lua
+player = Image.createEmpty(32,32)
+player:clear(white)
+block = Image.createEmpty(32,32)
+block:clear(green)
+```
+
+現在我們需要建立一個數列來存放我們的玩家訊息。本示範中就是簡單的保存玩家的 x 和 y 坐標位置。
+
+```lua
+Player = { x = 30, y = 100 }
+```
+
+接下來我們要定義兩個變數，存儲我們玩家圖像的高和寬。這些值將用於我們的碰撞函數中。記住我們剛才是以 32x32 建立圖像的，所以那就是我們要用的值。
+
+```lua
+playerHeight = 32
+playerWidth = 32
+```
+
+然後，為我們的三個方塊也建立一個數列來存儲訊息。自然，我們要存儲每個方塊在螢幕上所處的 x,y 值，還有每個方塊的寬度與高度。我們使用 width() 和 height() 命令來自動從我們剛才建立的方塊圖像中獲取這些值。代碼如下：
+
+```lua
+Block = {}
+Block[1] = { x = 100, y = 80, height = block:height(), width = block:width() }
+Block[2] = { x = 300, y = 30, height = block:height(), width = block:width() }
+Block[3] = { x = 200, y = 58, height = block:height(), width = block:width() }
+```
+
+現在讓我們寫一個函數讓玩家動起來。每次循環都會調用這個函數以檢查移動。如果你認真學了前面的課程，應該不難理解下面的代碼：
+
+```lua
+function movePlayer()
+pad = Controls.read()
+if pad:left() then
+Player.x = Player.x - 1
+end
+if pad:right() then
+Player.x = Player.x + 1
+end
+if pad:up() then
+Player.y = Player.y - 1
+end
+if pad:down() then
+Player.y = Player.y + 1
+end
+end
+```
+
+...終於到好玩的地方了。該是時候建立一個函數來檢查碰撞是否產生了。這個函數將使得我們能對遊戲中任何一個對象檢測碰撞，只要在循環中為該對象調用該函數。先看一下整個函數，然後我們來分析一下。
+
+```lua
+function collisionCheck(object)
+if (Player.x + playerWidth > object.x) and (Player.x < object.x + object.width) and (Player.y + playerHeight > object.y) and (Player.y < object.y + object.height) then
+Player.x = oldx
+Player.y = oldy
+end
+end
+```
+
+看一下第一行：function collisionCheck(object)
+
+這是建立一個名為 collisionCheck 的函數。注意括號裡的詞 object，簡單的說這就是一個“替代”變數。當我們稍後實際使用這個函數時需要用我們想要測試碰撞的對象名替換這個詞。再往下看你會發現 object 這個詞出現了很多次。一旦該函數執行，所有的 object 都會被替換為我們測試的實際對象名。
+
+有沒有覺得第二行很華麗？！
+
+這一行的 if 語句檢測了好幾個條件。請注意我把每一塊條件都放進了括號裡，這樣如此長的代碼會容易閱讀一些。
+
+首先是檢測是否 (Player.x + playerWidth > object.x)。一個圖像的 x 值就是指該圖像的左上角頂端的橫坐標。碰撞的關鍵就是檢測兩個圖像是否彼此有重疊，如果是則讓他們停止重疊。那麼為什麼要在玩家的 x 值上再加上玩家的寬度呢？很簡單，因為如果我們只檢測玩家的 x 值，那麼只有玩家圖像的左上角頂端重疊了才會檢測到碰撞。如果我們向右移動，而有一個方塊擋在路上，我們需要碰撞在玩家圖像的右側邊緣發生。玩家的 x 值加上其寬度就是該圖像的右上角頂端的值。
+
+簡單來說，我們要做的就是在圖像周圍建立一個要求碰撞的盒型區域。一旦移動該盒型區域即為發生碰撞。
+
+我畫了幾張圖讓你對這行程式碼有形象化的理解。藍色方盒是個靜止的方塊，而那個綠色方盒就是玩家。黑線表明碰撞發生的地方。
+
+到目前為止我們只是檢測了玩家的右側是否越過了其他物體的 x 坐標。
+
+正如你看到的，現在我們的玩家處於碰撞區域中……但是我們還有更多的檢測要做。下一個條件是 (Player.x < object.x + object.width)。
+這個代碼用於向左移動碰上物體圖像右側的時候。就是前一條件的反例而已。物體對象的 x 值加上它的寬度就是該物體的右側。現在讓我們看看前兩個檢查條件下的碰撞區域。
+
+目前為止我們仍然處於碰撞區域。在設定了前兩個條件之後，必須在這兩條黑線之間碰撞才會發生。
+
+下一個條件是 (Player.y + playerHeight > object.y)。
+
+這是用於向下移動的時候。玩家的 y 坐標加上玩家的高度就是玩家圖像的底端。如果該值大於其他物體的 y 坐標，則碰撞發生。讓我們看看三個條件下的碰撞區域。
+
+現在你會發現物體方塊的上方已不再是碰撞區域，而玩家圖像的底端必須大於物體方塊圖像的頂端才能使碰撞發生。
+
+最後一個檢查條件是 (Player.y < object.y + object.height)。
+
+這部分代碼用於檢查向上移動。如果玩家的 y 坐標小於物體的底端（y 坐標加高度）則碰撞發生。這次我們使用“小於”是因為在螢幕上向上移動時 y 值是遞減的。現在看看碰撞情況。
+
+現在物體方塊的底部以下也不是碰撞區域了。唯一會發生碰撞的地方就是方塊所占據的區域。通過 if 語句的四個條件我們將方塊所占區域包圍了起來。
+
+接著我們必須設定一旦進入該區域會發生什麼事，所以我們將玩家的 x 和 y 值設為 oldx 和 oldy。
+
+此時我們尚未定義 oldx 和 oldy 的值。這是我們在主循環中要做的第一件事。這些值在每次循環開始時會被玩家當前的 x 和 y 值設定。如果我們的函數判斷玩家處於碰撞區域則將玩家的位置設回上一次的位置，也就是 oldx 和 oldy 存儲的值。這樣我們就永遠無法走進物體方塊中了。函數在此結束。希望我上述的詳細解析能幫到你理解這個函數。
+
+最後就是我們的主循環。學到這你應該對下面的代碼不難理解了。
+
+```lua
+while true do
+
+-- store player's position at beginning of each loop
+oldx = Player.x
+oldy = Player.y
+screen:clear()
+
+movePlayer()
+
+--check collision for each block
+collisionCheck(Block[1])
+collisionCheck(Block[2])
+collisionCheck(Block[3])
+
+--paste player to screen
+screen:blit(Player.x,Player.y,player)
+
+--paste all 3 blocks to screen
+for a = 1,3 do
+screen:blit(Block[a].x,Block[a].y,block)
+end
+
+screen.waitVblankStart()
+screen.flip()
+end
+```
