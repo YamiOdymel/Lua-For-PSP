@@ -1014,3 +1014,382 @@ end
 你看，我們的主循環乾淨許多了吧。所有複雜的、細節的代碼被放到了函數裡，而在主循環中我們只需調用它。原先代碼中混在循環中的一堆代碼都被移走，放到了代碼頂端。
 
 我希望這能幫助學習有關函數使用的知識。以後的教學我們將使用函數了。
+
+# 9——讀寫檔案
+
+本課我們將學習如何讀取檔案和寫入檔案。這對於製作遊戲來說是很有幫助的。你可以調用別的檔案中的程式碼，也可以儲存最高分、遊戲存檔、玩家狀態等訊息到檔案裡……
+
+我們這就開始吧！
+
+首先，讓我們看一個簡單的命令：dofile。
+
+這個命令會讀入另一個檔案的程式碼並立即執行。
+
+```lua
+dofile("./test.lua")
+```
+
+很簡單的命令。注意 ./ 是指根目錄，不是子目錄。如果是子目錄，應該這樣用：
+
+```lua
+dofile("./files/test.lua")
+```
+
+那麼，如果我們的檔案 test.lua 包含下述程式碼：
+
+```lua
+playerx = 10
+playery = 20
+enemyx = 40
+enemyy = 50
+```
+
+...則一旦我們用 dofile 調用這個檔案，這些變數將立即得到聲明。檔案不是非得用 lua 後綴，txt 或其他後綴都可以。
+
+從檔案中讀取一行：
+
+假設你有一個很多行文本的檔案，你想從中讀取一行，並列印到螢幕上。為此我們可以使用 io.open() 命令打開檔案並讀取。
+
+命令的語法是 io.open(filename, mode)。此處我們將使用 r 作為 mode 的值，意指讀取（read）模式。
+作為參考，下面是所有可用模式的列表：
+
+* r - 讀取模式 
+* w - 寫入模式(覆蓋現有內容) 
+* a - 附加模式(附加在現有內容之後) 
+* b - 二進位制模式
+* r+ - 讀取更新模式(現有資料保留) 
+* w+ - 寫入更新模式(現有資料擦除) 
+* a+ - 附加更新模式(現有資料保留，只在檔案末尾附加)
+  第一件要做的事情就是打開檔案並存為一個變數。看下面。
+
+```lua
+file = io.open("testRead.txt", "r")
+```
+
+現在我們的檔案 testRead.txt 已打開並處於讀取模式。接著我們使用 read() 命令讀取檔案中的單行內容存為另一個變數。
+
+```lua
+ourline = file:read()
+```
+
+這將讀取我們的文本檔案的第一行。下一次我們使用 read() 命令它將讀取第二行。再下一次它會讀取第三行，依此類推。
+
+請注意，此命令前的 file 是我們之前打開檔案並儲存的變數名，你可以使用任何其他名字。file.read() 還可以使用下列任一個參數，只要用引號括起來放入括號裡就可以。
+
+* *n - 讀取一個數字並返回它。例：file.read("*n") 
+* *a - 從當前位置讀取整個檔案。例：file.read("*a") 
+* *l - (預設) - 讀取下一行，在檔案尾 (EOF) 處返回 nil。例：file.read("*l") 
+* number - 返回一個指定字元個數的字串，或在 EOF 時返回 nil。例：file.read(5)
+    既然我們已經讀取到所要的那一行，我們需要關閉打開的檔案，像這樣：
+
+```lua
+file:close()
+```
+
+現在要列印我們的檔案至螢幕我們只要這麼做：
+
+```lua
+screen:print(10,10,ourline,white)
+```
+
+讀取所有行
+
+要讀取一個檔案的所有行，你可以在一個 for 語句中使用上述技巧。請看下述程式碼：
+
+```lua
+y = 10
+
+file = io.open("testRead.txt","r")
+
+for line in file:lines() do
+y = y + 10
+screen:print(100,y,line,white)
+end
+
+file:close()
+```
+
+這個程式碼設定了一個起始值 y 用於列印，這樣它可以在螢幕不同的縱坐標列印每一行。照例，先打開檔案。然後是 for 語句，這句程式碼是說檔案的行數有多少下面的程式碼就執行幾次。我們的 y 坐標則每次循環加上 10 以便列印命令可以列印下一行。
+
+寫入檔案（覆蓋）
+
+寫入檔案的方式大致相同。下面的程式碼將覆蓋任何先前寫入檔案的內容：
+
+```lua
+file = io.open("testRead.txt","w")
+file:write("hello")
+file:close()
+```
+
+注意，我們這次使用了 w 模式，而不是 r 模式，因為我們是要寫入而不是讀取。我們用 file:write() 寫入括號裡作為參數的、用引號括起來的文本。你也可以用變數替代。如果你使用變數就不要用引號，請看一下例：
+
+```lua
+file = io.open("testRead.txt","w")
+myText = "Hello"
+file:write(myText)
+file:close()
+```
+
+寫入檔案（附加）
+
+你可以使用附加模式，這樣就可以在寫入檔案時將新內容附加在已有文本末尾，而不是刪除原來的。做法與上面基本相同，除了模式換成“附加”之外。請看程式碼：
+
+```lua
+file = io.open("testRead.txt","a")
+myText = "\nHello"
+file:write(myText)
+file:close()
+```
+
+注意到另一個區別沒？在 myText 變數裡我們為字串添加了 \n 。這個命令代表換行，這樣寫入的文本將從下一行開始。雖然在你的檔案中可能顯示為同一行只是中間隔了一個方塊，但是技術上它是新的一行。在 C/C++ 語言中也是這麼用的。
+
+將你所學的知識用在自己的小程式上吧。
+
+我們的下一講將討論音訊的處理，也會使用我們此處所學的讀寫檔案的命令做一個小程式。
+
+# 10——應用音訊
+
+現在該是時候給我們的項目加點響聲了。任何遊戲都需要聲音，這一講我們就來學學如何在Luaplayer中發聲。開始上課!
+
+luaplayer 可以播放如下音樂格式*：UNI, IT, XM, S3M, MOD, MTM, STM, DSM, MED, FAR, ULT 或 669，WAV 檔案可用作聲音。MIDI可以先轉換為上述格式再使用，比如 Modplug Tracker 就可以轉。請記住 luaplayer 不支援 mp3 檔案*。在學習了一些音訊命令之後我們將結合之前的成果建立一個小程式。
+
+> 譯者註：此說法已過時，目前luaplayer已支援mp3,ogg，aa3，oma，omg，詳見HM版相關函數。但是由於luaplayer目的在於編遊戲，所以對mp3播放的支援程度不高。
+
+先來看第一個命令，此命令將播放一個音樂檔案。
+
+```lua
+Music.playFile( string file, bool loop )
+```
+
+此處的“string file”是指你的音樂檔案名，例如“song.xm”。“bool loop”處放置“true”或者“false”。設“true”則一直循環播放該音樂，“false”則只播一遍。下面是個放歌的範例：
+
+```lua
+Music.playFile("mysong.mod", true)
+```
+
+接下來看看這個命令。它們是在開始播放音樂之後使用的：
+
+```lua
+Music.pause()
+Music.stop()
+Music.resume()
+```
+
+這些命令不用解釋你也能看懂。
+
+* Music.pause() 將暫停歌曲播放。
+* Music.stop() 將停止歌曲播放。
+* Music.resume() 將恢復播放被暫停的歌曲。
+
+還有一個命令是用來偵測一首歌是否正在播放。這將返回 true 或 false。看一下：
+
+```lua
+Music.playing()
+```
+
+假如說我們想偵測我們的歌曲是否在播放，如果是則列印一條消息到螢幕。我們可以這樣做：
+
+```lua
+if Music.playing() == true then
+screen:print(10,10,"Music is playing",white)
+end
+```
+
+還有一個命令是用來設定音樂檔案的音量的。只要在括號中填入一個數值，範圍在 0 至 128 之間。下面是命令格式：
+
+```lua
+Music.volume(Number)
+```
+
+現在讓我們學學用於音效的聲音檔案，尤其是 wav 檔案。這和播放音樂檔案有些區別。下面是如何載入一個聲音：
+
+```lua
+bonkSound = Sound.load("bonk.wav",false)
+```
+
+wav 檔案作為一個變數被載入，稍後我們就可以用這個變數來指稱該聲音。此處我們設“false”是以防循環播放。記住設為“true”將循環播放，如果你的確是這麼想的話。
+
+關於 WAV 檔案的一個要點是，在 luaplayer 中只能使用單聲道的，立體聲的不行。你可以透過右鍵點擊檔案查看其屬性的摘要頁來確認這一點。
+
+現在讓我們來再學一些命令。下個命令是播放該檔案。使用你載入聲音時設的變數名。如下：
+
+```lua
+bonkSound:play()
+```
+
+但是我不建議你這樣播放聲音檔案。這會導致一個常見錯誤，類似“loop ingettable(無法取得循環)”之類消息。下面是我播放聲音檔案的方法。不同之處就是用另一個變數取代 bonkSound。
+
+```lua
+local sound = bonkSound
+voice = sound:play() 
+--要停止聲音使用：
+voice:stop()
+```
+
+還有一個命令與音樂檔案的命令類似，偵測聲音是否正在播放。命令如下：
+
+```lua
+voice:playing()
+```
+
+還有一些聲音和音樂方面的命令等待你去探究，但是這些已足夠你使用聲音和音樂了。
+
+現在我們開始做一個小東西。我們將以一個選單螢幕為起始，用來選擇藍色還是黑色背景。按下 X 時程式會往下執行，而背景色已按照我們的選擇設好。此處我們的程式將顯示其已被執行多少次。怎麼做？嗯，就是每次在選單螢幕按下 X 時程式就打開一個檔案（我們稍後會建立），然後寫一個數字進檔案。程式也會從該檔案中讀取該數字並儲存在一個變數中。如果你完全退出程式然後再返回，它仍然能顯示被執行了多少次，因為這個資料已存在一個檔案裡了。那麼，讓我們忙起來吧。
+
+首先，我想要你用notepad或任何其他編輯器建立一個普通的txt檔案。在該文本檔案中輸入數字 0。儲存為 counter.txt。就是一個普通的文本檔案。
+
+然後開始編寫我們的 lua 檔案。先建立一些要用到的色彩對象：
+
+```lua
+white = Color.new(255,255,255)
+blue = Color.new(0,0,255)
+black = Color.new(0,0,0)
+```
+
+接著是一些變數。
+
+```lua
+oldpad = Controls.read()
+startcolor = black
+gamestate = "menu"
+```
+
+* oldpad 將儲存我們上一次按下的按鍵。
+* startcolor 存儲我們稍後將在程式第二部分使用的顏色。我們以 black 開始。
+* gamestate 則是用來查看該使用哪個函數。我們將建立兩個函數。一個是顯示選單的，另一個執行程式餘下的工作。既然我們從選單開始，該變數的起始值就如此設定。
+
+下一部分就要處理聲音了！首先，請下載兩個小小的 WAV 檔案，放在程式所在目錄下。
+
+現在讓我們在程式中載入這些 wav 檔案。我們不想讓它們循環，所以使用 false。
+
+```lua
+menusound = Sound.load("beep.wav",false)
+goodbye = Sound.load("goodbye.wav",false)
+```
+
+夠簡單吧！還記得上一講的那些檔案命令嗎？我們來次回顧吧。此處我們將打開我們之前建立的 counter.txt 檔案，並從中讀取數值存入變數 counter 中。
+
+```lua
+file = io.open("counter.txt", "r")
+counter = file:read("*n")
+file:close()
+```
+
+請注意我們使用了"*n"以讀入一個數字。
+
+接著我們將建立一個資料表，用於我們的起始螢幕選擇器。這會包含一個我們建立來用作選擇器的圖像，以及它的 x 和 y 坐標值。資料表下一行的命令則將我們的選擇器圖像以藍色清空。程式碼如下：
+
+```lua
+selector = { image = Image.createEmpty(145,15), x = 147,y = 77 }
+selector.image:clear(blue)
+```
+
+現在我們建一個稱為 drawMenu() 的函數，執行選單所有的必要任務。下面是起始行：
+
+```lua
+function drawMenu()
+```
+
+我們將把此函數用作一個循環函數，所以每次循環我們先清屏然後讀取按鍵的輸入。程式碼如下：
+
+```lua
+screen:clear()
+pad = Controls.read()
+```
+
+接下來我們將把我們的選擇器繪製(blit)到螢幕上，並列印兩行字。程式碼如下：
+
+```lua
+screen:blit(selector.x,selector.y,selector.image)
+screen:print(150,80,"Start Game (Black)",white)
+screen:print(150,100,"Start Game (Blue)",white)
+```
+
+請注意我們是怎麼使用資料表的值來繪製選擇器到螢幕上的。這個選擇器圖像將會上下移動以高亮顯示被選擇的選單項。要確保在列印文字之前繪製，否則圖像將覆蓋文字。
+
+列印的兩行字則是我們給玩家的選項。要麼以黑色螢幕開始遊戲，要麼是藍色的螢幕。
+
+在函數的下一部分將檢測按鍵是否按下。先做上鍵的部分吧。
+
+```lua
+if pad:up() and oldpad:up() ~= pad:up() then
+selector.y = 77
+startcolor = black
+local sound = menusound
+voice = sound:play()
+end
+```
+
+第一行是說如果上鍵被按下並且不是最後被按下的按鈕則.....
+
+第二行將 selector 的 y 值設定為 77。這是為了在文本周圍貼上圖像以便看起來像是被選擇的。
+然後設定 startcolor 為 black。
+
+接著使用我之前建議的方法播放 menusound 這個 wav 檔案。
+
+現在處理下鍵。程式碼與上面很相似，除了圖像向下一點，顏色改為藍色以外。程式碼如下：
+
+```lua
+if pad:down() and oldpad:down() ~= pad:down() then
+selector.y = 97
+startcolor = blue
+local sound = menusound
+voice = sound:play()
+end
+```
+
+現在來處理 X 按鈕。
+
+```lua
+if pad:cross() and oldpad:cross() ~= pad:cross() then
+gamestate = "game"
+counter = counter + 1
+file = io.open("counter.txt","w")
+file:write(counter)
+file:close()
+end
+end
+```
+
+此處我們將 gamestate 設為“game”以便選單的程式碼不再執行（在我們編寫了後面的程式碼之後）。我們以 1 為基數遞增 counter 變數。然後打開 txt 檔案，寫入 counter 的新值，取代檔案裡的舊值。不要忘了關閉檔案。
+
+注意，多出來的那個 end 是用來終結函數的。這個函數已完成了！
+
+我們下一個函數將執行離開選單後的遊戲程式碼。這個函數相當小巧簡單，全部程式碼如下：
+
+```lua
+function playGame()
+screen:clear(startcolor)
+pad = Controls.read() 
+screen:print(100,100,"This program has been executed " .. counter .. " times.",white)
+screen:print(100,110,"Press Start to exit to Menu",white)
+
+if pad:start() then
+gamestate = "menu"
+local sound = goodbye
+voice = sound:play()
+end
+end
+```
+
+在此函數中，請注意我們使用了在選單中透過 startcolor 變數選擇的顏色清屏。列印了兩個消息，檢查了 start 按鍵的按下。按下 start 鍵將把 gamestate 設回 menu 並播放一個 wav 檔案。
+
+接下來開始我們的程式主循環。由於使用了函數，此處很簡短。在循環中我們將檢查遊戲的狀態並執行該狀態的函數。程式碼如下！
+
+```lua
+while true do
+
+if gamestate == "menu" then
+drawMenu()
+end
+
+if gamestate == "game" then
+playGame()
+end
+
+screen.flip()
+oldpad = pad
+end
+```
+
+...接下來... Oh yeah！已經完成啦！執行試試看吧。
