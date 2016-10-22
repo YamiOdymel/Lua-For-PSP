@@ -663,3 +663,354 @@ end
 這段程式碼是說，如果當前敵兵編號是 5 且其生命值等於 0 則列印“all enemies are dead”。儲存你的程式碼，執行之。按下 X 直到一個敵兵死亡。然後下一個敵兵會上陣，一個跟一個，直到所有 5 個敵兵都被殺死為止。
 
 我希望本課能對你今後的表達式學習有所幫助。
+
+# 7——使用圖像
+
+到目前為止，我們所有的程式均只使用了文本。我想下水前先濕濕腳比較好，有了基本編程知識，將使一切容易領會。在本節課中，我將介紹使用圖像，及一些獲取圖像訊息的命令。
+
+至於我們打算編寫什麼？嗯，就做一個看起來真正象是遊戲的程式吧。它不會做任何華而不實或令人興奮的事情，但足夠應付本教學的目的了，圖像。我們這裡所學的只是眾多圖像命令的一部分。我們將在以後的教學裡進一步了解這些。你也可以自己在luaplayer的檔案中查詢。我們的作品將包括一個可移動的角色，他可以在螢幕中自由走動，但不能夠走出螢幕邊緣。
+
+第一件事是將下面提供的圖像儲存到你的工作目錄。這些圖像只是做個樣本，你完全可以用自己的。LuaPlayer 可以載入 PNG 和 JPEG 圖像。大多數情況下我會使用 PNG 而不選 JPEG，尤其當你需要透明的時候。現在儲存這些圖像：點此下載
+
+解壓至工作目錄。你應該有如下3個圖像：
+
+* player.png
+* grass.png
+* flower.png
+
+現在我們先回到教學的第一部分，稍後再編寫我們的程式碼。
+
+載入圖像
+
+要在lua中使用圖像，你必須先將其載入程式，並賦予一個變數（或資料表）。你可以在程式開頭這麼做，也可以稍後再做，這取決於你什麼時候需要該圖像。在我們待會要寫的程式碼中我們會在開始就預先載入圖像。這裡是一個載入圖像的範例：
+
+```lua
+grass = Image.load("grass.png")
+```
+
+這一句將載入圖像檔案 "grass.png" 並賦予變數 "grass"。要正確載入圖像你得確保該圖像與你的lua腳本檔案位於同一目錄。如果你把圖像放在一個子資料夾，例如 "Images"，你就得用 "Images/grass.png" 而不是 "grass.png"。大小寫也不要搞錯。image 的 I 要大寫，load 的 l 要小寫。載入圖像很簡單吧？！
+
+顯示圖像
+
+要在螢幕上真正顯示圖像並不比載入更難。這裡是完整命令：
+
+```lua
+screen:blit(x, y, Image source, [sourcex, sourcey, width, height], [alpha = true])
+```
+
+這裡有很多訊息要填！不是所有的參數都必要，中括號裡的如果你不需要你可以完全忽略。現在讓我們解釋一下。
+
+程式碼起始的 screen:blit 是一個命令，它將圖像貼到螢幕上。
+
+括號裡的內容是真正樂趣所在。
+
+x 和 y 與 print 命令中的相同。指定圖像貼到螢幕上的位置。
+
+Image source 指定要貼上的圖像。上文中我們載入了一個圖像叫 grass，所以我們可以用 grass 作為圖像源。
+
+[sourcex, sourcey, width, height] 是可選的。用來載入某幅大圖的一部分。分片圖是個極好的例子。你可以載入一幅單圖，分成好幾個部分，使用此程式碼你可以只貼上其中的一部分。sourcex 和 sourcey 是要擷取區域開始點的 x 和 y 坐標值。這樣貼上的不是整幅圖，而是其中一部分。
+
+width 和 height 是指圖像擷取區域的寬度和高度。
+
+命令的最後是 alpha 參數。這是用來設定圖像的透明度的。如果設為 true 則圖像透明， 設為 false 則顯示原圖。
+
+本課我們不會使用全部參數。
+
+獲取圖像尺寸
+
+獲取載入的圖像尺寸有時很有用，這要用下面兩個命令：
+
+```lua
+image:width()
+image:height()
+```
+
+實際使用時，用你想獲取寬高的圖像變數名取代此處的“image”。例如，要獲取我們的grass圖像的寬度和高度，你可以用：
+
+```lua
+grass:width()
+grass:height()
+```
+
+開始編寫程式
+
+讓我們開始編寫我們的遊戲。第一件要做的就是載入我們的圖像。建立一個新檔案，輸入如下程式碼：
+
+```lua
+grass = Image.load("grass.png")
+player = Image.load("player.png")
+flower = Image.load("flower.png")
+```
+
+就這樣。我們已經把我們的三個圖像載入了程式。
+
+現在我們來用用那些獲取圖像尺寸的命令。先輸入下列程式碼，然後我會解釋的。我還想提醒你，你如果自己手工輸入這些程式碼會比複製貼上的效果要好。這樣你會對這些命令記得更牢。不管怎樣，添加如下程式碼：
+
+```lua
+screenwidth = 480 - player:width()
+screenheight = 272 - player:width()
+```
+
+這有什麼用嗎？我來解釋一下它的用途。這部分程式碼幫助我們讓玩家角色到達螢幕邊緣時停止，無論是往左或往右（水平方向）。我們知道PSP螢幕尺寸是480，但是如果我們設定螢幕邊界是480，我們的角色就會超出螢幕32個像素，因為角色是32像素寬。player:width() 獲取玩家圖像的寬度，也就是 32 像素。從螢幕的寬度和高度中扣除該值就可以讓角色圖像在螢幕邊緣停止。
+
+接著我們來建立一個資料表以存儲玩家角色的訊息。此例程中需要的唯一訊息就是玩家在螢幕上的 x 和 y 坐標位。輸入如下程式碼：
+
+```lua
+Player = { } Player[1] = { x = 200, y = 50 }
+```
+
+這將存儲玩家在螢幕上的x、y位置。我們將讓玩家從 x 200、y 50 的位置開始。 
+
+現在開始我們的主循環。輸入如下程式碼：
+
+```lua
+while true do
+pad = Controls.read()
+screen:clear()
+```
+
+在下一部分程式碼中我將引入一個新的循環命令。就是“for”循環。我先舉個例子讓你了解它的工作方式，無需放在你的程式碼中。這個例子透過使用一個小循環列印了5個玩家的武器。
+
+```lua
+for a = 1,5 do
+screen:print(10, 10, Player[a].weapon, green)
+end
+```
+
+要使用 for 循環，你要賦予一個臨時變數起始值和終止值。
+
+在上文中我們說 "for a = 1,5 do"，這意味著建立一個循環，其變數 a 的起始值為 1，終止值為 5。你可以理解為“a 等於 1 至 5”。
+
+然後在循環中我們要列印玩家的武器到螢幕上。
+
+最後一行是 end 語句，必須使用以終止循環。
+
+這樣，該循環將不斷重複直到 a 等於終止值，然後循環終止。第一次循環執行時 a 等於 1。下一次循環時 a 將等於 2，然後是 3，然後是 4，最後是 5。這樣就可以快速的將玩家 1 至 5 的武器都列印到螢幕上。當然。實際操作時你需要更改 print 命令的螢幕坐標，不然就都列印到一起去了。但是這展示了該循環的用法。在 for 循環中你也可以根據需要使用 if 語句。
+
+我們將使用這個命令把我們的grass圖像平鋪在整個螢幕上。輸入下述程式碼，然後我會解釋。當然，如果要做一個帶卷軸之類的複雜遊戲，使用平鋪引擎將是更好的辦法，不過目前我們不需要用它。
+
+```lua
+for a = 0, 14 do
+for b = 0,8 do
+screen:blit(32 * a, 32 * b, grass)
+end
+end
+```
+
+這裡我們在一個 for 循環中巢狀了又一個 for 循環！這將把 grass 圖像貼到整個螢幕上。橫向貼 15 幅圖，縱向 9 幅圖。請注意，我們設定起始值為 0 而不是 1，這樣圖像會從螢幕最左邊貼起。
+
+現在讓我們再貼一些圖像。
+
+```lua
+screen:blit(100,100,flower)
+screen:blit(300,220,flower)
+screen:blit(Player[1].x,Player[1].y,player)
+```
+
+這一段就是簡單的貼上兩幅 flower 圖像，還有 player 的圖像。很快，當我們使用移動按鍵時我們將在每次循環中讓玩家的坐標隨著按鍵的按下而改變。使用上述 blit 命令我們的 player 圖像將自動貼到螢幕的正確區域。 
+
+現在讓我們加上那些按鍵，以檢測是否按下了方向鍵。輸入下述程式碼：
+
+```lua
+if pad:left() and Player[1].x > 0 then
+Player[1].x = Player[1].x - 2
+end
+
+if pad:right() and Player[1].x < screenwidth then
+Player[1].x = Player[1].x + 2
+end
+
+if pad:up() and Player[1].y > 0 then
+Player[1].y = Player[1].y - 2
+end
+
+if pad:down() and Player[1].y < screenheight then
+Player[1].y = Player[1].y + 2
+end
+```
+
+這些程式碼將檢測我們是否按下了“上下左右”鍵。使用 and 語句同時確保我們沒有超出螢幕邊界。既然螢幕的最左側和最頂端的坐標是 0，我們只要檢查我們的位置是否大於 0 即可。其他部分我們使用 screenwidth 向右走，screenheight 則用來向下走。這些變數我們之前已建立。如果我們的位置透過了 if 測試，則玩家的 x 或 y 坐標遞增或遞減 2 點。每次主循環執行都會將 player 圖像貼到提供給它的新位置。
+
+最後讓我結束循環。使用如下程式碼：
+
+```lua
+screen.waitVblankStart()
+screen.flip()
+end
+```
+
+儲存你的工作，執行吧。使用方向鍵讓角色在螢幕上穿梭。你應該是無法穿越螢幕邊緣的。
+
+# 8——使用函數
+
+本課我們將學習怎麼使用函數。建立一個函數相當於新建一個屬於你自己的Lua命令。你可以將經常使用的代碼放進函數中，這樣你就可以隨時調用了。函數放在主循環之外。一般放在代碼開頭的變數聲明附近比較好。
+
+首先讓我們看一下函數是怎麼聲明的。檢查下面代碼：
+
+```lua
+function functionName()
+(函數中要執行的代碼。
+可以使用多行程式碼。)
+end
+```
+
+這就是函數的構成方式，讓我們看看下面的範例函數，它將在每次調用時列印一條簡單的消息到螢幕。
+
+```lua
+function printMessage()
+screen:print(100,100, "Functions are fun!")
+end
+```
+
+現在，要想在程序中列印這條消息，就必須在要使用的地方調用這個函數。就上例而言使用下述代碼就可以調用該函數，將函數的代碼執行一次。
+
+```lua
+printMessage()
+```
+
+這麼簡單？！呣...恐怕就是這樣！使用上述代碼將會執行我們先前建立的函數代碼。通過調用 printMessage() 就可把 "Functions are fun!" 列印到螢幕上。
+
+當你開始編寫更複雜的程序或遊戲時，你將會大量使用函數。在你的主循環中調用函數而不是實際的代碼將使你的代碼更加整齊易懂。之前我說過函數放在主循環外面，這是對的。但是，從主循環內調用它們是沒問題的。
+
+函數也可以建立來返回一個值。建立函數時加個括號和參數就行。比如說，我們要建個函數將兩個數值加起來並把結果返回。首先我們得建立這個函數。看下面：
+
+```lua
+function additUp(a, b)
+sum = a + b
+return sum
+end
+```
+
+請注意，在括號中我們放了字母 "a" 和 "b"，其實你可以用任何字母或者甚至單詞。它們是用於本函數內部的變數，也只存在與本函數中。因為我們打算將兩個數相加，所以我們需要兩個變數來存儲。在你的函數中可以使用任意多個變數，只要你用逗號分開它們。
+
+然後我們在函數中建立了一個變數叫 "sum"，它將被賦予變數 "a" 和 "b" 相加的數值。等你看到它的調用就會更清楚了。接下來我們使用了一個命令 return，它告訴函數一旦我退出函數將返回一個值給此函數。我們現在要返回的是變數 "sum" 的值。最後，我們 end 了我們的函數。
+
+現在讓我們看看如何使用這個函數，再做一些解釋。看如下代碼：
+
+```lua
+screen:print(100,100,additUp(5,6), green)
+```
+
+這將把我們函數的結果列印到螢幕上。請注意，在調用函數時我們使用了實際的數值。此例中我們使用了 5 和 6。就是說將數值 5 賦值給 a，數值 6 賦值給 b。現在在我們先前建立的函數內，任何 a 或 b 被使用的地方，都將被我們實際賦予的數值代替。所以函數中 "sum = a + b" 這句話將被解析為 "sum = 5 + 6"。這將把 11 這個數值賦予 "sum" 變數然後返回給我們的 print 命令，列印到螢幕上。
+
+如果需要我們也可以將此訊息存在一個變數中。這樣我們就不必在不需要的時候不得不立即使用它，或者在以後重複使用時不用每次都跑一遍整個函數。請看下面：
+
+```lua
+myTotal = additUp(5,6)
+```
+
+這句代碼就把我們函數的返回值存儲在變數 myTotal 裡。myTotal 將等於 11。
+
+讓我們看一下上一講我們編寫的程序。代碼應該與下面的類似：
+
+```lua
+grass = Image.load("grass.png")
+player = Image.load("player.png")
+flower = Image.load("flower.png")
+
+screenwidth = 480 - player:width()
+screenheight = 272 - player:width()
+
+Player = { }
+Player[1] = { x = 200, y = 50 }
+
+while true do
+pad = Controls.read()
+screen:clear()
+
+for a = 0, 14 do
+for b = 0,8 do
+screen:blit(32 * a, 32 * b, grass)
+end
+end
+
+screen:blit(100,100,flower)
+screen:blit(300,220,flower)
+
+screen:blit(Player[1].x,Player[1].y,player)
+
+if pad:left() and Player[1].x > 0 then
+Player[1].x = Player[1].x - 2
+end
+
+if pad:right() and Player[1].x < screenwidth then
+Player[1].x = Player[1].x + 2
+end
+
+if pad:up() and Player[1].y > 0 then
+Player[1].y = Player[1].y - 2
+end
+
+if pad:down() and Player[1].y < screenheight then
+Player[1].y = Player[1].y + 2
+end
+
+screen.waitVblankStart()
+screen.flip()
+end
+```
+
+我們可以建立一些函數，讓主循環看起來更乾淨整齊一些。我們可以將所有的方向鍵檢查放入一個函數，還可以將螢幕繪製的代碼放入一個函數。這兩個都不需要返回值。看看下面的代碼，了解函數的使用：
+
+```lua
+grass = Image.load("grass.png")
+player = Image.load("player.png")
+flower = Image.load("flower.png")
+
+screenwidth = 480 - player:width()
+screenheight = 272 - player:width()
+
+Player = { }
+Player[1] = { x = 200, y = 50 }
+
+-- Function to check player movements
+function playerMovement()
+pad = Controls.read()
+if pad:left() and Player[1].x > 0 then
+Player[1].x = Player[1].x - 2
+end
+
+if pad:right() and Player[1].x < screenwidth then
+Player[1].x = Player[1].x + 2
+end
+
+if pad:up() and Player[1].y > 0 then
+Player[1].y = Player[1].y - 2
+end
+
+if pad:down() and Player[1].y < screenheight then
+Player[1].y = Player[1].y + 2
+end
+end
+
+-- Function to paste images to screen
+function pasteImages()
+for a = 0, 14 do
+for b = 0,8 do
+screen:blit(32 * a, 32 * b, grass)
+end
+end
+
+screen:blit(100,100,flower)
+screen:blit(300,220,flower)
+
+screen:blit(Player[1].x,Player[1].y,player)
+end
+
+-- Main Loop
+while true do
+
+screen:clear()
+
+pasteImages()
+
+playerMovement()
+
+screen.waitVblankStart()
+screen.flip()
+end
+```
+
+你看，我們的主循環乾淨許多了吧。所有複雜的、細節的代碼被放到了函數裡，而在主循環中我們只需調用它。原先代碼中混在循環中的一堆代碼都被移走，放到了代碼頂端。
+
+我希望這能幫助學習有關函數使用的知識。以後的教學我們將使用函數了。
