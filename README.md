@@ -123,10 +123,207 @@ screen.flip()
 
 ```lua
 while true do
-screen.waitVblankStart()
+    screen.waitVblankStart()
 end
 ```
 
 以後我們會深入探討循環的。現在你只要知道它必須在那裡！
 
 到此我們的第一個程序完成！保存你的代碼文件，雙擊 `script.cmd` 運行你的程序。如果一切順利你應該在螢幕上看到你的紅色文本了。
+
+# 3——寫一個使用變數的簡單程序
+
+本課我們學習怎樣在程序中使用變數。變數是很重要的工具，將來也必然成為你最好的朋友。一言以蔽之，變數就是訊息的存儲容器，供你在程序中隨時調用。
+
+現在我們就來寫一個使用變數的簡單程序。同時也學習一下Lua中的簡單算術。這次我們對每一行程式碼都給與註釋。
+
+首先，讓我們再次以建立色彩對象開始，用來在螢幕上列印訊息。這次我們選用綠色。
+
+```lua
+-- 綠色色彩對象
+green = Color.new(0, 255, 0)
+```
+
+接著就開始建立我們第一個變數吧。這將是一個存儲你出生年份的變數。請隨意替換1981為你自己的出生年份，事實上我也建議你這麼做！
+
+```lua
+-- 將出生年份存為變數 myBirthYear
+myBirthYear = 1981
+```
+
+就是這樣！我們所做的就是取得數值1981（或是你使用的自己的出生年份）並將其保存在我們命名為myBirthYear的變數中。稍後我們在程序中將使用該變數。
+
+現在移下一行再設一個變數用來存儲當前年份。
+
+```lua
+-- 將當前年份存為變數 currentYear
+currentYear = 2008
+```
+
+現在讓我們建立一個略微不同的變數。
+
+```lua
+-- 建立一個空變數
+myAge = nil
+```
+
+請注意這次我們為變數賦值為nil，就是表明該變數尚未賦值。我們會在稍後為此變數存入訊息。
+
+那麼，我們最後再建立一個變數，向你表明變數除了存儲數值以外，也能存儲字串（文本）。注意文本要用引號括起來。
+
+```lua
+-- 在變數中存儲一些文字
+someText = "My age is roughly "
+```
+
+到此我想你已知道如何建立變數了，那麼讓我們開始使用它們。我們將要做的就是使用我們的變數和一些基礎算術計算出你的年齡。開始添加下面的代碼到你的程序中吧：
+
+```lua
+-- 用 currentYear 減去 myBirthYear 並將結果保存在變數 myAge 中
+myAge = currentYear - myBirthYear
+```
+
+這一步是提取myBirthYear中存儲的值，用currentYear的值減去，然後將結果保存在myAge變數中。這樣myAge就被賦予了值！
+
+現在，讓我們使用上一講學到的print命令將我們的文本變數列印到螢幕上。
+
+```lua
+-- 列印文本變數至螢幕
+screen:print(10,100,someText,green)
+```
+
+與我們上一講所做的唯一不同（除了顏色）在於我們這次列印的是變數的值，而不是直接的文本。請注意此處我們沒有使用引號。這句代碼將以綠色文本在x-10,y-100的位置列印someText變數中存儲的任何內容。
+
+現在我們將在這句話的旁邊列印我們的年齡結果。我們得用一個新命令。要在 someText 的文本右側列印 myAge，我們可以使用雙句點（..）
+
+這稱為“串聯”。那麼我們把剛才那一行程式碼略作修改如下：
+
+```lua
+-- 同時列印文本變數和年齡至螢幕
+screen:print(10,100,someText .. myAge,green)
+```
+
+最後我們把screen.flip()和循環扔進代碼以結束程式。
+
+```lua
+-- 離屏快取轉至顯屏
+screen.flip()
+-- 不停循環
+while true do
+    screen.waitVblankStart()
+end
+```
+
+保存你的程序，運行查看結果。
+
+透過使用變數，我們只要改變myBirthYear的值，程序就可以自動計算出任何人的年齡。沒有變數的話，你就不得不修改很多行程式碼，有些程序甚至得上萬行。
+
+本節課我們只用到了減法，很簡單，就是 - 符號。
+
+* 加法請使用 +
+* 乘法請使用 *
+* 除法請使用 /
+
+# 4——讓按鍵為你工作
+
+本節可將教你如何接收PSP的按鈕輸入，並編寫一個按下不同按鈕顯示不同文本的簡單程式。如果沒有按鈕輸入，就沒有與使用者的交互，那可是相當無聊的。所以讓我們學習一下這方面的知識吧。我們會使用到之前的課程所教授的東西，包括變數。本節我們將減少註釋量，並介紹另一種使你的程式碼整齊的方法。這就是分區法。
+
+首先我們為要使用的變數分一個區塊。很簡單，註釋中為區塊名稱加一些容易辨識的符號，例如星號，當然你也可以用自己的符號！
+
+```lua
+-- *******變數********
+```
+
+我們仍然需要一個色彩對象以便寫屏。如果你原意可以建立幾個不同的色彩對象，各占一行，以便今後使用。不過我把這件事留給你自己。我只打算建立一個。（早日學會自立可是好事情）
+
+```lua
+green = Color.new(0,255,0)
+```
+
+接下來我們要建立一些文本變數，以便存儲按下按鈕時將會列印的字串，內容是你按下了哪個按鈕。我們只為一半的按鈕建立變數。另一半我們直接用print命令列印出來。這有兩個好處：一、你可以鍛鍊變數的使用；二、你將看到這兩種方法對於小程式來說都不錯。我們將會用到十個按鈕，它們是方向按鈕，圖形按鈕，肩按鈕。
+
+這次我們使用print命令的方法也會略有不同。當列印被按下的按鈕名稱時我們希望按鈕名稱顯示在雙引號裡，為了這個目的我們將使用單引號包圍文本字串，而不是雙引號。如果使用通常的雙引號，程式會以為字串在按鈕名稱之前結束。現在我們來建立5個變數（記得我說過只建一半吧）。
+
+```lua
+upPressed = 'You are pressing the "UP" button'
+downPressed = 'You are pressing the "DOWN" button'
+leftPressed = 'You are pressing the "LEFT" button'
+rightPressed = 'You are pressing the "RIGHT" button'
+LPressed = 'You are pressing the "L" button'
+```
+
+完成後我們繼續。還記得我們每次都用的那個循環吧。不想用了？！也好，是時候學點新東西了。你做的每個程式都將有一個主循環。該區塊的程式碼會反覆執行直到某個條件達成為止，不管這個條件是什麼。在循環內可以有數個要執行的程式碼模組。其中一些是每次循環都要執行的，另一些則會檢查是否條件滿足，然後決定執行與否。讓我們開始我們的循環。
+
+```lua
+-- *****主循環****** 
+while true do
+```
+
+接下來的程式碼都在此循環內。下一行要添加的程式碼是件新事物，清屏。
+
+```lua
+screen:clear()
+```
+
+這個命令將清除螢幕上顯示的任何內容。每次循環螢幕都將首先被清空。順便提一下，循環的速度極快，你根本就不會察覺到！所以不清屏的話，我們列印的內容將在螢幕上層層堆疊，搞得很難看。讓我們接著學新東西。
+
+```lua
+pad = Controls.read()
+```
+
+簡單的說，這一句是在每次循環時獲取按鈕的輸入。同時請注意pad也是一個變數，你可以改用其他名稱，例如buttons。pad看起來挺標準，所以我們就不改了。
+
+現在該學習你的第一個條件表達式了，if語句。相信我，這沒有它看起來那麼難。同時你還會學到按鈕的輸入命令。先把下面的程式碼寫到程式裡，然後我來解釋。
+
+```lua
+if pad:up() then screen:print(100,100,upPressed,green) end
+```
+
+這一句程式碼就是說“如果上鍵被按下，則用綠色列印變數upPressed所含的文本”。這將返回true或false值。每個if語句都以 if 開頭，然後給出要檢查的條件。此例中則是檢查是否上鍵被按下。然後跟隨在關鍵字 then 之後的內容則是如果條件為真要執行的程式碼。最後，每個語句都必須以 end 結束。語法簡單易懂，一目了然。今後我們還將深入討論它的。現在讓我們為其他三個方向按鈕和L按鈕添加程式碼。
+
+```lua
+if pad:down() then
+    screen:print(100,100,downPressed,green)
+end
+if pad:left() then
+    screen:print(100,100,leftPressed,green)
+end
+if pad:right() then
+    screen:print(100,100,rightPressed,green)
+end
+if pad:l() then
+    screen:print(100,100,LPressed,green)
+end
+```
+
+現在為另5個按鈕加程式碼。這次我們直接在print語句裡包含要列印的文本，以練習不同的方法。
+
+```lua
+if pad:r() then
+    screen:print(100,100,'You are pressing the "R" button',green)
+end
+if pad:triangle() then
+    screen:print(100,100,'You are pressing the "TRIANGLE" button',green)
+end
+if pad:circle() then
+    screen:print(100,100,'You are pressing the "CIRCLE" button',green)
+end
+if pad:cross() then
+    screen:print(100,100,'You are pressing the "X" button',green)
+end
+if pad:square() then
+    screen:print(100,100,'You are pressing the "SQUARE" button',green)
+end
+```
+
+呼！現在讓我們結束循環。我們需要翻轉螢幕以便離屏快取的內容寫到顯屏上。注意，此處的end是終止我們的while循環。
+
+```lua
+screen.waitVblankStart()
+screen.flip()
+end
+```
+
+儲存檔案，複製到PSP上執行，按下按鈕看看吧！
+
+> 譯者註：作者沒有提到模擬墊（搖杆）的控制，補充一個例程，見附件。點此下載
