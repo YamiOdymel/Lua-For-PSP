@@ -4,6 +4,8 @@
 
 簡體翻譯來源：[菜鸟也能为PSP编程 - Lua Player 编程初级指南](http://psp.tgbus.com/pspdg/jc/etct/200805/20080506094037.shtml)
 
+還有正體化工具：[2D-Gate 繁化姬](https://sctctw.2d-gate.org/)
+
 # 菜鳥也能為 PSP 撰寫程式 - Lua Player 撰寫初級指南
 
 本文由gadget2k翻譯自 http://www.evilmana.com/tutorials/lua_tutorial_01.php 的網路上教學，轉載請註明。想進一步深造的，請學習下面的《[Programming in Lua](https://www.lua.org/pil/)》，這是對 Lua 的全面闡述。
