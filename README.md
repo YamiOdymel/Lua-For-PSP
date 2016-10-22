@@ -1,22 +1,30 @@
-本文由gadget2k翻譯自http://www.evilmana.com/tutorials/lua_tutorial_01.php的網路上教學，轉載請註明。想進一步深造的，請學習下面的《Programming in Lua》（點此下載），這是對Lua的全面闡述。
+# 註釋
+
+這個文章是我以前小時候撰寫 PSP 程式翻到的，後來知道了如何運用關鍵字之後在六年之後又找回了這篇教學文章，文中的譯者皆不是我，我只是將他 Markdown 還有正體中文化。其中有缺少的連結我能找到我盡量補，還有需要粗體的文字也會盡所能的標記 :)
+
+簡體翻譯來源：[菜鸟也能为PSP编程 - Lua Player 编程初级指南](http://psp.tgbus.com/pspdg/jc/etct/200805/20080506094037.shtml)
+
+# 菜鳥也能為 PSP 撰寫程式 - Lua Player 撰寫初級指南
+
+本文由gadget2k翻譯自 http://www.evilmana.com/tutorials/lua_tutorial_01.php 的網路上教學，轉載請註明。想進一步深造的，請學習下面的《[Programming in Lua](https://www.lua.org/pil/)》，這是對 Lua 的全面闡述。
 
 # 1. 起跑前的準備工作
 
-本系列教學旨在幫助完全的編程新手學會使用lua腳本語言為PSP開發小型程式和遊戲。在開始之前我們需要做一些準備工作，雖然不都是非要不可，但是有了它們你會事半功倍。
+本系列教學旨在幫助完全的編程新手學會使用 Lua 腳本語言為 PSP 開發小型程式和遊戲。在開始之前我們需要做一些準備工作，雖然不都是非要不可，但是有了它們你會事半功倍。
 
 > 譯者註：本教學全部學完了你也就是會爬而已。要學會走，甚至跑起來，就看你的熱情和毅力了！
 
-LuaPlayer for PSP - 這是頭等大事，沒有它你的lua腳本就無法在PSP上執行。點此下載
+LuaPlayer for PSP - 這是頭等大事，沒有它你的 Lua 腳本就無法在PSP上執行。[點此下載](http://www.luaplayer.org/LuaPlayer_v0.20_firmware15.zip)
 
-LuaPlayer for Windows - 這是在PC上執行的LuaPlayer，寫好了腳本可以先在PC上檢驗，省得為了測試而在PC和PSP之間來回倒騰檔案。點此下載
+LuaPlayer for Windows - 這是在 PC 上執行的 LuaPlayer，寫好了腳本可以先在 PC 上檢驗，省得為了測試而在 PC 和 PSP 之間來回倒騰檔案。[點此下載](http://www.luaplayer.org/luaplayerwindows-0.20.zip)
 
-> 譯者注1：該PC版本基於luaPlayer 0.20，LuaPlayer HM 5.0支援的新函數可能無法執行。
+> 譯者注1：該 PC 版本基於 LuaPlayer 0.20，LuaPlayer HM 5.0 支援的新函數可能無法執行。
 
-> 譯者注2：鍵盤與PSP按鍵的對應。SELECT = a，START = s，LTRIGGER = q，RTRIGGER = w，TRIANGLE = r，CIRCLE = f，CROSS = c，SQUARE = d，十字鍵 = 方向鍵
+> 譯者注2：鍵盤與 PSP 按鍵的對應。SELECT = a，START = s，LTRIGGER = q，RTRIGGER = w，TRIANGLE = r，CIRCLE = f，CROSS = c，SQUARE = d，十字鍵 = 方向鍵
 
-Notepad++ - 比windows自帶的notepad要強悍多的開源免費文字編輯器，可以高亮顯示多種程式語言，還具備自動完成功能，自動對程式碼樹級管理。點此下載
+Notepad++ - 比 Windows自帶的 Notepad 要強悍多的開源免費文字編輯器，可以高亮顯示多種程式語言，還具備自動完成功能，自動對程式碼樹級管理。
 
-當然你也可以使用其他任何文字編輯器撰寫腳本，包括 Notepad。 （以前推薦的miro lua不如這個強，刪除。）
+當然你也可以使用其他任何文字編輯器撰寫腳本，包括 Notepad。 （以前推薦的 Micro Lua 不如這個強，刪除。）
 
 Windows 版 LuaPlayer 的使用
 
