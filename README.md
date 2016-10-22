@@ -447,7 +447,7 @@ screen:print(250,20,"Enemy Type: " .. Enemy[1].type,green)
 
 ```lua
 if pad:cross() then
-Enemy[1].health = Enemy[1].health - 5
+    Enemy[1].health = Enemy[1].health - 5
 end
 ```
 
@@ -532,7 +532,7 @@ c = 2 ^ 8 -- 乘方
 
 ```lua
 if <某條件> then
-<執行某程式碼>
+    <執行某程式碼>
 end
 ```
 
@@ -543,10 +543,10 @@ myCash = 253
 itemCost = 100
 
 if myCash > itemCost then
-myCash = myCash - itemCost
-screen:print(100,100,"Item Bought",blue)
+    myCash = myCash - itemCost
+    screen:print(100,100,"Item Bought",blue)
 else
-screen:print(100,100,"Not enough money",blue)
+    screen:print(100,100,"Not enough money",blue)
 end
 ```
 
@@ -556,14 +556,15 @@ end
 
 ```lua
 myNumber = 4
+
 if myNumber == 1 then
-screen:print(100,100,"Your lucky number is 1",blue)
+    screen:print(100,100,"Your lucky number is 1",blue)
 elseif myNumber == 2 then
-screen:print(100,100,"Your lucky number is 2",blue)
+    screen:print(100,100,"Your lucky number is 2",blue)
 elseif myNumber == 3 then
-screen:print(100,100,"Your lucky number is 3",blue)
+    screen:print(100,100,"Your lucky number is 3",blue)
 else
-screen:print(100,100,"Your number isn't very lucky!",blue)
+    screen:print(100,100,"Your number isn't very lucky!",blue)
 end
 ```
 
@@ -582,7 +583,7 @@ Player[1] = { level = 15, class = "warrior", weapon = "knife" }
 
 ```lua
 if Player[1].level >= 20 and Player[1].class == "warrior" then
-Player[1].weapon = "Dragon Slayer"
+    Player[1].weapon = "Dragon Slayer"
 end
 ```
 
@@ -590,7 +591,7 @@ end
 
 ```lua
 if hat == "blue" and shirt == "red" and age > 15 and state ~= "Florida" then
-screen:print(100,100,"You are accepted!",yellow)
+    screen:print(100,100,"You are accepted!",yellow)
 end
 ```
 
@@ -600,7 +601,7 @@ end
 myCar = "Mustang"
 
 if myCar == "Corvette" or myCar == "Mustang" then
-screen:print(10,20,"Nice car!",green)
+    screen:print(10,20,"Nice car!",green)
 end
 ```
 
@@ -620,7 +621,7 @@ currentEnemy = 1
 
 ```lua
 if Enemy[currentEnemy].health == 0 and currentEnemy <= 4 then
-currentEnemy = currentEnemy + 1
+    currentEnemy = currentEnemy + 1
 end
 ```
 
@@ -642,21 +643,21 @@ screen:print(250,20,"Enemy Type: " .. Enemy[currentEnemy].type,green)
 
 ```lua
 if pad:cross() and oldpad:cross() ~= pad:cross() and Enemy[1].health > 0 then
-Enemy[1].health = Enemy[1].health - 5
+    Enemy[1].health = Enemy[1].health - 5
 ```
 
 修改為：
 
 ```lua
 if pad:cross() and oldpad:cross() ~= pad:cross() and Enemy[currentEnemy].health > 0 then
-Enemy[currentEnemy].health = Enemy[currentEnemy].health - 5
+    Enemy[currentEnemy].health = Enemy[currentEnemy].health - 5
 ```
 
 作為結束，我們將新增一些程式碼，如果 5 個敵兵都被殺死則列印 `All enemies are dead` 至螢幕。把這個程式碼置於主循環中列印敵兵生命值和類型的 `screen:print` 行下。
 
 ```lua
 if currentEnemy == 5 and Enemy[currentEnemy].health == 0 then
-screen:print(50,100,"All enemies are dead",green)
+    screen:print(50,100,"All enemies are dead",green)
 end
 ```
 
@@ -765,15 +766,15 @@ Player = { } Player[1] = { x = 200, y = 50 }
 
 ```lua
 while true do
-pad = Controls.read()
-screen:clear()
+    pad = Controls.read()
+    screen:clear()
 ```
 
 在下一部分程式碼中我將引入一個新的循環命令。就是 `for` 循環。我先舉個例子讓你了解它的工作方式，無需放在你的程式碼中。這個例子透過使用一個小循環列印了 5 個玩家的武器。
 
 ```lua
 for a = 1,5 do
-screen:print(10, 10, Player[a].weapon, green)
+    screen:print(10, 10, Player[a].weapon, green)
 end
 ```
 
@@ -791,9 +792,9 @@ end
 
 ```lua
 for a = 0, 14 do
-for b = 0,8 do
-screen:blit(32 * a, 32 * b, grass)
-end
+    for b = 0,8 do
+         screen:blit(32 * a, 32 * b, grass)
+    end
 end
 ```
 
@@ -813,19 +814,19 @@ screen:blit(Player[1].x,Player[1].y,player)
 
 ```lua
 if pad:left() and Player[1].x > 0 then
-Player[1].x = Player[1].x - 2
+    Player[1].x = Player[1].x - 2
 end
 
 if pad:right() and Player[1].x < screenwidth then
-Player[1].x = Player[1].x + 2
+    Player[1].x = Player[1].x + 2
 end
 
 if pad:up() and Player[1].y > 0 then
-Player[1].y = Player[1].y - 2
+    Player[1].y = Player[1].y - 2
 end
 
 if pad:down() and Player[1].y < screenheight then
-Player[1].y = Player[1].y + 2
+    Player[1].y = Player[1].y + 2
 end
 ```
 
@@ -858,7 +859,7 @@ end
 
 ```lua
 function printMessage()
-screen:print(100,100, "Functions are fun!")
+    screen:print(100,100, "Functions are fun!")
 end
 ```
 
@@ -876,8 +877,8 @@ printMessage()
 
 ```lua
 function additUp(a, b)
-sum = a + b
-return sum
+    sum = a + b
+    return sum
 end
 ```
 
@@ -919,9 +920,9 @@ pad = Controls.read()
 screen:clear()
 
 for a = 0, 14 do
-for b = 0,8 do
-screen:blit(32 * a, 32 * b, grass)
-end
+    for b = 0,8 do
+        screen:blit(32 * a, 32 * b, grass)
+    end
 end
 
 screen:blit(100,100,flower)
@@ -930,19 +931,19 @@ screen:blit(300,220,flower)
 screen:blit(Player[1].x,Player[1].y,player)
 
 if pad:left() and Player[1].x > 0 then
-Player[1].x = Player[1].x - 2
+    Player[1].x = Player[1].x - 2
 end
 
 if pad:right() and Player[1].x < screenwidth then
-Player[1].x = Player[1].x + 2
+    Player[1].x = Player[1].x + 2
 end
 
 if pad:up() and Player[1].y > 0 then
-Player[1].y = Player[1].y - 2
+    Player[1].y = Player[1].y - 2
 end
 
 if pad:down() and Player[1].y < screenheight then
-Player[1].y = Player[1].y + 2
+    Player[1].y = Player[1].y + 2
 end
 
 screen.waitVblankStart()
@@ -965,30 +966,30 @@ Player[1] = { x = 200, y = 50 }
 
 -- Function to check player movements
 function playerMovement()
-pad = Controls.read()
-if pad:left() and Player[1].x > 0 then
-Player[1].x = Player[1].x - 2
-end
+    pad = Controls.read()
+    if pad:left() and Player[1].x > 0 then
+        Player[1].x = Player[1].x - 2
+    end
 
-if pad:right() and Player[1].x < screenwidth then
-Player[1].x = Player[1].x + 2
-end
+    if pad:right() and Player[1].x < screenwidth then
+        Player[1].x = Player[1].x + 2
+    end
 
-if pad:up() and Player[1].y > 0 then
-Player[1].y = Player[1].y - 2
-end
+    if pad:up() and Player[1].y > 0 then
+        Player[1].y = Player[1].y - 2
+    end
 
-if pad:down() and Player[1].y < screenheight then
-Player[1].y = Player[1].y + 2
-end
+    if pad:down() and Player[1].y < screenheight then
+        Player[1].y = Player[1].y + 2
+    end
 end
 
 -- Function to paste images to screen
 function pasteImages()
-for a = 0, 14 do
-for b = 0,8 do
-screen:blit(32 * a, 32 * b, grass)
-end
+    for a = 0, 14 do
+        for b = 0,8 do
+            screen:blit(32 * a, 32 * b, grass)
+    end
 end
 
 screen:blit(100,100,flower)
@@ -1000,14 +1001,14 @@ end
 -- Main Loop
 while true do
 
-screen:clear()
+    screen:clear()
 
-pasteImages()
+    pasteImages()
 
-playerMovement()
+    playerMovement()
 
-screen.waitVblankStart()
-screen.flip()
+    screen.waitVblankStart()
+    screen.flip()
 end
 ```
 
@@ -1102,8 +1103,8 @@ y = 10
 file = io.open("testRead.txt","r")
 
 for line in file:lines() do
-y = y + 10
-screen:print(100,y,line,white)
+    y = y + 10
+    screen:print(100,y,line,white)
 end
 
 file:close()
@@ -1191,7 +1192,7 @@ Music.playing()
 
 ```lua
 if Music.playing() == true then
-screen:print(10,10,"Music is playing",white)
+    screen:print(10,10,"Music is playing",white)
 end
 ```
 
@@ -1313,10 +1314,10 @@ screen:print(150,100,"Start Game (Blue)",white)
 
 ```lua
 if pad:up() and oldpad:up() ~= pad:up() then
-selector.y = 77
-startcolor = black
-local sound = menusound
-voice = sound:play()
+    selector.y = 77
+    startcolor = black
+    local sound = menusound
+    voice = sound:play()
 end
 ```
 
@@ -1331,10 +1332,10 @@ end
 
 ```lua
 if pad:down() and oldpad:down() ~= pad:down() then
-selector.y = 97
-startcolor = blue
-local sound = menusound
-voice = sound:play()
+    selector.y = 97
+    startcolor = blue
+    local sound = menusound
+    voice = sound:play()
 end
 ```
 
@@ -1342,12 +1343,12 @@ end
 
 ```lua
 if pad:cross() and oldpad:cross() ~= pad:cross() then
-gamestate = "game"
-counter = counter + 1
-file = io.open("counter.txt","w")
-file:write(counter)
-file:close()
-end
+    gamestate = "game"
+    counter = counter + 1
+    file = io.open("counter.txt","w")
+    file:write(counter)
+    file:close()
+    end
 end
 ```
 
@@ -1359,16 +1360,16 @@ end
 
 ```lua
 function playGame()
-screen:clear(startcolor)
-pad = Controls.read() 
-screen:print(100,100,"This program has been executed " .. counter .. " times.",white)
-screen:print(100,110,"Press Start to exit to Menu",white)
+    screen:clear(startcolor)
+    pad = Controls.read() 
+    screen:print(100,100,"This program has been executed " .. counter .. " times.",white)
+    screen:print(100,110,"Press Start to exit to Menu",white)
 
-if pad:start() then
-gamestate = "menu"
-local sound = goodbye
-voice = sound:play()
-end
+    if pad:start() then
+        gamestate = "menu"
+        local sound = goodbye
+        voice = sound:play()
+    end
 end
 ```
 
@@ -1379,16 +1380,16 @@ end
 ```lua
 while true do
 
-if gamestate == "menu" then
-drawMenu()
-end
+    if gamestate == "menu" then
+        drawMenu()
+    end
 
-if gamestate == "game" then
-playGame()
-end
+    if gamestate == "game" then
+        playGame()
+    end
 
-screen.flip()
-oldpad = pad
+    screen.flip()
+    oldpad = pad
 end
 ```
 
@@ -1422,7 +1423,7 @@ counter:start()
 
 ```lua
 while true do
-screen:clear()
+    screen:clear()
 ```
 
 現在，在我們的程式中將需要與定時器的計時步伐保持一致。我們將利用定時器的當前時間顯示訊息到螢幕上。我們可以通過命令 `countername:time()` 得到定時器的當前時間。新增如下原始碼：
@@ -1441,7 +1442,7 @@ screen:print(10,10,"Counter Time: " .. currentTime,white)
 
 ```lua
 if currentTime < 1000 then
-screen:print(100,100,"Less than 1000",white)
+    screen:print(100,100,"Less than 1000",white)
 end
 ```
 
@@ -1449,7 +1450,7 @@ end
 
 ```lua
 if currentTime > 1000 and currentTime < 2000 then
-screen:print(100,100,"Greater than 1000",white)
+    screen:print(100,100,"Greater than 1000",white)
 end
 ```
 
@@ -1459,8 +1460,8 @@ end
 
 ```lua
 if currentTime > 2000 then
-counter:reset(0)
-counter:start()
+    counter:reset(0)
+    counter:start()
 end
 ```
 
@@ -1468,7 +1469,8 @@ end
 
 ```lua
 screen.waitVblankStart()
-screen.flip() end
+screen.flip()
+end
 ```
 
 # 12. 碰撞示範
@@ -1480,7 +1482,7 @@ screen.flip() end
 首先我們建立兩個要用的色彩。一個用於玩家，一個用於我們的方塊。
 
 ```lua
-green=Color.new(0,255,0)
+green = Color.new(0,255,0)
 white = Color.new(255,255,255)
 ```
 
@@ -1519,19 +1521,20 @@ Block[3] = { x = 200, y = 58, height = block:height(), width = block:width() }
 
 ```lua
 function movePlayer()
-pad = Controls.read()
-if pad:left() then
-Player.x = Player.x - 1
-end
-if pad:right() then
-Player.x = Player.x + 1
-end
-if pad:up() then
-Player.y = Player.y - 1
-end
-if pad:down() then
-Player.y = Player.y + 1
-end
+    pad = Controls.read()
+    
+    if pad:left() then
+        Player.x = Player.x - 1
+    end
+    if pad:right() then
+        Player.x = Player.x + 1
+    end
+    if pad:up() then
+        Player.y = Player.y - 1
+    end
+    if pad:down() then
+        Player.y = Player.y + 1
+    end
 end
 ```
 
@@ -1539,10 +1542,10 @@ end
 
 ```lua
 function collisionCheck(object)
-if (Player.x + playerWidth > object.x) and (Player.x < object.x + object.width) and (Player.y + playerHeight > object.y) and (Player.y < object.y + object.height) then
-Player.x = oldx
-Player.y = oldy
-end
+    if (Player.x + playerWidth > object.x) and (Player.x < object.x + object.width) and (Player.y + playerHeight > object.y) and (Player.y < object.y + object.height) then
+        Player.x = oldx
+        Player.y = oldy
+    end
 end
 ```
 
@@ -1588,27 +1591,27 @@ end
 ```lua
 while true do
 
--- store player's position at beginning of each loop
-oldx = Player.x
-oldy = Player.y
-screen:clear()
+    -- store player's position at beginning of each loop
+    oldx = Player.x
+    oldy = Player.y
+    screen:clear()
 
-movePlayer()
+    movePlayer()
 
---check collision for each block
-collisionCheck(Block[1])
-collisionCheck(Block[2])
-collisionCheck(Block[3])
+    --check collision for each block
+    collisionCheck(Block[1])
+    collisionCheck(Block[2])
+    collisionCheck(Block[3])
 
---paste player to screen
-screen:blit(Player.x,Player.y,player)
+    --paste player to screen
+    screen:blit(Player.x,Player.y,player)
 
---paste all 3 blocks to screen
-for a = 1,3 do
-screen:blit(Block[a].x,Block[a].y,block)
-end
+    --paste all 3 blocks to screen
+    for a = 1,3 do
+        screen:blit(Block[a].x,Block[a].y,block)
+    end
 
-screen.waitVblankStart()
-screen.flip()
+    screen.waitVblankStart()
+    screen.flip()
 end
 ```
